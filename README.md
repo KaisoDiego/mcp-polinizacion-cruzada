@@ -1,16 +1,16 @@
-# 🧬 MCP Server — Polinización Cruzada para Arquitectura de Software
+# 🧬 MCP Server — Cross-Pollination for Software Architecture
 
-Un servidor MCP (Model Context Protocol) que expone 3 herramientas de **polinización cruzada**: dado un problema de software, extrae sus principios abstractos, busca correlaciones en campos externos (biología, física, economía, etc.) y propone una implementación alternativa inspirada en esos procesos naturales.
+An MCP (Model Context Protocol) server that exposes 3 cross-pollination tools: given a software problem, it extracts its abstract principles, finds correlations in external fields (biology, physics, economics, etc.), and proposes an alternative implementation inspired by those natural processes.
 
-**Verificado con 2 clientes agénticos distintos:** Claude Desktop y CrewAI — sin modificar una línea del servidor.
+**Verified with 2 different agentic clients:** Claude Desktop and CrewAI — without modifying a single line of the server.
 
 ---
 
-## ¿Qué es polinización cruzada en software?
+## What is cross-pollination in software?
 
-Es una técnica de diseño donde los principios fundamentales de un problema de software se abstraen del dominio tecnológico y se buscan soluciones análogas en otros campos. Por ejemplo: el problema de *balanceo de carga sin coordinador central* se resuelve de forma análoga a como los tejidos biológicos distribuyen nutrientes — sin un nodo central, usando gradientes locales.
+A design technique where the fundamental principles of a software problem are abstracted from the technological domain and analogous solutions are sought in other fields. For example: the problem of *load balancing without a central coordinator* is solved analogously to how biological tissues distribute nutrients — without a central node, using local gradients.
 
-El servidor implementa este proceso en 3 herramientas encadenadas:
+The server implements this process as 3 chained tools:
 
 ```
 abstrae_tool → compara_tool → implementa_tool
@@ -18,42 +18,42 @@ abstrae_tool → compara_tool → implementa_tool
 
 ---
 
-## Herramientas expuestas
+## Exposed Tools
 
 | Tool | Input | Output |
 |---|---|---|
-| `abstrae_tool` | Descripción del problema de software | Principios fundamentales sin jerga tecnológica |
-| `compara_tool` | Principios abstractos | Correlación en campo externo con nivel de confianza |
-| `implementa_tool` | Correlación + problema original | Propuesta de implementación con pseudocódigo |
+| `abstrae_tool` | Software problem description | Fundamental principles without tech jargon |
+| `compara_tool` | Abstract principles | External field correlation with confidence level |
+| `implementa_tool` | Correlation + original problem | Concrete implementation proposal with pseudocode |
 
-Cada tool hace una llamada interna a Claude (Haiku 4.5) con un prompt especializado. El cliente MCP no necesita saber cómo están implementadas — solo las descubre y las usa.
+Each tool makes an internal call to Claude (Haiku 4.5) with a specialized prompt. The MCP client doesn't need to know how they're implemented — it discovers and uses them dynamically.
 
 ---
 
-## Arquitectura
+## Architecture
 
 ```
-server.py (FastMCP, transporte Stdio)
-     ↓ expone 3 tools via MCP
-     ├── Cliente 1: Claude Desktop
+server.py (FastMCP, Stdio transport)
+     ↓ exposes 3 tools via MCP
+     ├── Client 1: Claude Desktop
      │   config: claude_desktop_config.json
-     └── Cliente 2: CrewAI
+     └── Client 2: CrewAI
          config: cliente_mcp.py (MCPServerAdapter)
 ```
 
-**Discovery dinámico verificado:**
+**Dynamic discovery verified:**
 ```
-Tools disponibles desde servidor MCP: ['abstrae_tool', 'compara_tool', 'implementa_tool']
+Tools available from MCP server: ['abstrae_tool', 'compara_tool', 'implementa_tool']
 ```
-CrewAI descubre las tools en runtime via `tools/list` — no están hardcodeadas en el cliente.
+CrewAI discovers the tools at runtime via `tools/list` — they are not hardcoded in the client.
 
 ---
 
-## Instalación
+## Installation
 
-### Prerequisitos
+### Prerequisites
 - Python 3.10+
-- API key de Anthropic (console.anthropic.com)
+- Anthropic API key (console.anthropic.com)
 
 ### Setup
 ```bash
@@ -64,23 +64,23 @@ source venv/bin/activate  # Windows: venv\Scripts\Activate.ps1
 pip install mcp anthropic python-dotenv
 ```
 
-Crea un archivo `.env`:
+Create a `.env` file:
 ```
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-### Verificar que el servidor arranca
+### Verify the server starts
 ```bash
 python server.py
 # Output: "Servidor MCP de Polinización Cruzada iniciado"
-# Ctrl+C para salir
+# Ctrl+C to stop
 ```
 
 ---
 
-## Conectar Cliente 1 — Claude Desktop
+## Client 1 — Claude Desktop
 
-Edita `claude_desktop_config.json` (ubicación según OS):
+Edit `claude_desktop_config.json`:
 - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
@@ -88,8 +88,8 @@ Edita `claude_desktop_config.json` (ubicación según OS):
 {
   "mcpServers": {
     "polinizacion-cruzada": {
-      "command": "/ruta/absoluta/venv/Scripts/python.exe",
-      "args": ["/ruta/absoluta/server.py"],
+      "command": "/absolute/path/to/venv/Scripts/python.exe",
+      "args": ["/absolute/path/to/server.py"],
       "env": {
         "ANTHROPIC_API_KEY": "sk-ant-..."
       }
@@ -98,14 +98,14 @@ Edita `claude_desktop_config.json` (ubicación según OS):
 }
 ```
 
-Reinicia Claude Desktop completamente. Verifica en **Settings → Developer** que el servidor aparece con punto verde.
+Restart Claude Desktop completely. Verify in **Settings → Developer** that the server appears with a green dot.
 
-**Prompt de prueba:**
-> "Aplica polinización cruzada al problema de diseñar un sistema de rate limiting para una API con alta concurrencia"
+**Test prompt:**
+> "Apply cross-pollination to the problem of designing a rate limiting system for a high-concurrency API"
 
 ---
 
-## Conectar Cliente 2 — CrewAI
+## Client 2 — CrewAI
 
 ```bash
 pip install crewai "crewai-tools[mcp]"
@@ -118,23 +118,23 @@ import asyncio
 
 async def main():
     server_params = {
-        "command": "/ruta/absoluta/venv/Scripts/python.exe",
-        "args": ["/ruta/absoluta/server.py"]
+        "command": "/absolute/path/to/venv/Scripts/python.exe",
+        "args": ["/absolute/path/to/server.py"]
     }
     async with MCPServerAdapter(server_params) as mcp_tools:
-        agente = Agent(
-            role="Arquitecto de Software con Polinización Cruzada",
-            goal="Aplicar polinización cruzada para proponer implementaciones innovadoras",
-            backstory="Arquitecto que combina conocimiento de múltiples disciplinas.",
+        agent = Agent(
+            role="Software Architect with Cross-Pollination",
+            goal="Apply cross-pollination to propose innovative implementations",
+            backstory="An architect who combines knowledge from multiple disciplines.",
             tools=list(mcp_tools),
             llm="anthropic/claude-haiku-4-5-20251001"
         )
-        tarea = Task(
-            description="Aplica polinización cruzada al problema: {tu_problema}. Usa las tools en secuencia.",
-            expected_output="Documento con principios abstractos, correlación externa y propuesta de implementación.",
-            agent=agente
+        task = Task(
+            description="Apply cross-pollination to: {your_problem}. Use tools in sequence.",
+            expected_output="Document with abstract principles, external correlation, and implementation proposal.",
+            agent=agent
         )
-        crew = Crew(agents=[agente], tasks=[tarea])
+        crew = Crew(agents=[agent], tasks=[task])
         print(crew.kickoff())
 
 asyncio.run(main())
@@ -142,32 +142,38 @@ asyncio.run(main())
 
 ---
 
-## Demo — Ejemplo real
+## Demo — Real Example
 
-**Input:** *"Diseñar un sistema de balanceo de carga para 50 workers sin coordinador central"*
+**Input:** *"Design a load balancing system for 50 workers without a central coordinator"*
 
-**`abstrae_tool` →** Principios: distribución sin autoridad central, optimización local con visibilidad parcial, estabilidad dinámica, comunicación asincrónica.
+**`abstrae_tool` →** Principles: distribution without central authority, local optimization with partial visibility, dynamic stability, asynchronous communication.
 
-**`compara_tool` →** `[Alta confianza]` Correlación con difusión de nutrientes en tejidos biológicos — células sin coordinador central, gradientes locales, señales paracrinas.
+**`compara_tool` →** `[High confidence]` Correlation with nutrient diffusion in biological tissues — cells without a central coordinator, local gradients, paracrine signaling.
 
-**`implementa_tool` →** Propuesta: algoritmo de gradiente de carga + difusión creciente inspirado en el modelo tisular. Incluye pseudocódigo Python y tabla comparativa vs. hash consistente estándar.
+**`implementa_tool` →** Proposal: load gradient + spreading diffusion algorithm inspired by the tissue model. Includes Python pseudocode and comparative table vs. standard consistent hashing.
 
 ---
 
-## Hallazgos técnicos
+## Technical Findings
 
-- **Regla crítica Stdio:** nunca usar `print()` en el servidor — corrompe el stream JSON-RPC. Usar `print(..., file=sys.stderr)`.
-- **FastMCP** genera el `inputSchema` automáticamente desde type hints y docstrings de Python.
-- **Fricción por cliente:** Claude Desktop requiere solo configuración JSON. CrewAI requiere `MCPServerAdapter` + manejo async + extra `crewai-tools[mcp]`.
+- **Critical Stdio rule:** never use `print()` in the server — it corrupts the JSON-RPC stream. Use `print(..., file=sys.stderr)` instead.
+- **FastMCP** automatically generates `inputSchema` from Python type hints and docstrings.
+- **Client friction:** Claude Desktop requires only JSON configuration. CrewAI requires `MCPServerAdapter` + async handling + `crewai-tools[mcp]` extra package.
 
 ---
 
 ## Stack
 
-- `mcp` — SDK oficial de Model Context Protocol
-- `anthropic` — SDK de Anthropic para llamadas al LLM
-- `FastMCP` — abstracción sobre el SDK para definir tools con decoradores
-- Transporte: **Stdio** (local) — migrable a Streamable HTTP para multi-cliente remoto
+- `mcp` — official Model Context Protocol SDK
+- `anthropic` — Anthropic SDK for LLM calls
+- `FastMCP` — abstraction over the SDK for defining tools with decorators
+- Transport: **Stdio** (local) — upgradeable to Streamable HTTP for remote multi-client
 
 ---
 
+## Context
+
+Project #3 of a 8-10 week AI agents learning plan. Empirically verifies MCP's core promise: the same server serves clients from different frameworks without modifying a single line of server code.
+
+Related projects:
+- [Project #2 — CrewAI vs LangGraph](https://github.com/KaisoDiego/crewai-langgraph-comparativa)
