@@ -171,9 +171,3 @@ asyncio.run(main())
 
 ---
 
-## Contexto
-
-Proyecto #3 de un plan de aprendizaje de agentes de IA (8-10 semanas). Verifica empíricamente la promesa central de MCP: el mismo servidor sirve a clientes de frameworks distintos sin modificar una línea del servidor.
-
-Proyectos relacionados:
-- [Proyecto #2 — CrewAI vs LangGraph](https://github.com/KaisoDiego/crewai-langgraph-comparativa) *(próximamente)*
